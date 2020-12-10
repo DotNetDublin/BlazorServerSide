@@ -2,12 +2,14 @@ using BlazorServerSide.Data.Repositories;
 using BlazorServerSide.Shared.Entities;
 using BlazorServerSide.Web.Services;
 using BlazorServerSide.Web.ViewModels;
+using Dapper.CX.SqlServer.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace BlazorServerSide.Web
 {
@@ -29,18 +31,10 @@ namespace BlazorServerSide.Web
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            //Repositories                                    
-            services.AddScoped<IEmployeeRepository>(_ => new EmployeeRepository(connectionString));
-
-            //Data Services
-            services.AddScoped<IEmployeeDataService, EmployeeDataService>();
-
-            //Validations            
-            services.AddTransient<IValidator<Employee>, EmployeeValidator>();
-
-            //View Models            
-            services.AddScoped<IEmployeeListingViewModel, EmployeeListingViewModel>();
-            services.AddScoped<IIndexViewModel, IndexViewModel>();
+            // Simple case DapperCX with no user profile integration.
+            // All we need is connection string and a delegate to tell DapperCX how to handle SQL generated identity values.
+            // this return the type of your Id properties on all your entity classes
+            services.AddDapperCX(connectionString, (value) => Convert.ToInt32(value));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

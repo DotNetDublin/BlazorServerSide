@@ -1,0 +1,77 @@
+﻿@page "/Employees"
+@inject DapperCX<int> Data
+
+<h3>Employees</h3>
+
+<EditForm Model="CreateEmployee" OnSubmit="OnEmployeeSubmit" class="mb-3">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>First Name:</label>
+                <InputText @bind-Value="CreateEmployee.FirstName" placeholder="first name" required="required" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <InputText @bind-Value="CreateEmployee.LastName" placeholder="last name" required="required" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Department:</label>
+                <InputText @bind-Value="CreateEmployee.Department" placeholder="department" required="required" class="form-control"/>
+            </div>
+
+            <button class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</EditForm>
+
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Department</th>
+        <th>Date Created</th>
+        <th></th>
+    </tr>
+    @foreach (var employee in List)
+    {
+        <tr>
+            <td>@employee.Id</td>
+            <td>@employee.FirstName</td>
+            <td>@employee.LastName</td>
+            <td>@employee.Department</td>
+            <td>@employee.DateCreated.ToShortDateString()</td>
+            <td><button @onclick="(args) => DeleteEmployee(employee.Id)" class="btn btn-outline-danger">delete</button></td>
+        </tr>
+    }
+</table>
+
+
+@code {
+    Employee CreateEmployee = new Employee();
+    IEnumerable<Employee> List = Enumerable.Empty<Employee>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await RefreshListAsync();
+    }
+
+    async Task RefreshListAsync()
+    {
+        List = await Data.QueryAsync(new AllEmployees());
+    }
+
+    async Task OnEmployeeSubmit()
+    {
+        await Data.SaveAsync(CreateEmployee);
+        CreateEmployee = new Employee(); // clears the create form
+        await RefreshListAsync();
+    }
+
+    async Task DeleteEmployee(int id)
+    {
+        await Data.DeleteAsync<Employee>(id);
+        await RefreshListAsync();
+    }
+}

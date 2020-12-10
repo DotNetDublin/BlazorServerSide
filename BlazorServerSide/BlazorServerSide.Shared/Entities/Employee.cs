@@ -10,10 +10,26 @@ namespace BlazorServerSide.Shared.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Department { get; set; }
-        public DateTime? DateModified { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateModified { get; set; } 
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow; // in a real app, we'd setup correct local times based on user profile
         [Computed] public bool IsNew => Id == default;        
     }
+
+    /*
+    I would normally use my ModelSync app to create this in target database
+    http://www.aosoftware.net/modelSync.html
+    but for that to work well, you need to put entity classes in a .NET Standard DLL.
+    Unfortunately my app is pretty fussy here, so I just created this table manually
+
+    CREATE TABLE [dbo].[Employee] (
+	    [Id] int identity(1,1) NOT NULL PRIMARY KEY,
+	    [FirstName] nvarchar(50) NOT NULL,
+	    [LastName] nvarchar(50) NOT NULL,
+	    [Department] nvarchar(50) NOT NULL,
+	    [DateModified] datetime NULL,
+	    [DateCreated] datetime NOT NULL
+    )
+    */
 
     public class EmployeeValidator : AbstractValidator<Employee>
     {

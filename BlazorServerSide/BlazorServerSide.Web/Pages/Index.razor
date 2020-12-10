@@ -1,20 +1,5 @@
 ﻿@page "/"
-@inject IIndexViewModel ViewModel
 
-<h1>
-    Employees
-</h1>
+<h1>Hello from AdamO</h1>
 
-<p>
-    @ViewModel.WelcomeMessage
-</p>
-
-<EmployeeListing />
-
-@code
-{
-    protected override async Task OnInitializedAsync()
-    {
-        await ViewModel.InitialiseViewModel();
-    }
-}
+<p><a href="/Employees">Dapper CX employee page demo</a></p>
