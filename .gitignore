@@ -10,3 +10,5 @@
 /BlazorServerSide/BlazorServerSide.Shared/obj
 /BlazorServerSide/BlazorServerSide.Web/bin/Debug/net5.0
 /BlazorServerSide/BlazorServerSide.Web/obj
+/.vs/BlazorServerSide/v16
+/.vs/slnx.sqlite
