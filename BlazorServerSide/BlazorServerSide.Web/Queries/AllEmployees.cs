@@ -7,7 +7,7 @@ namespace BlazorServerSide.Web.Queries
 {
     /// <summary>
     /// in a real app, we'd add criteria properties, but we're just keeping it simple now.
-    /// And I didn't actually create a test project for testing SQL like this, but I still used TestableQuery from Dapper.CX
+    /// And I didn't actually create a test project for testing SQL like this, but I still used TestableQuery from Dapper.QX
     /// </summary>
     public class AllEmployees : TestableQuery<Employee>
     {
